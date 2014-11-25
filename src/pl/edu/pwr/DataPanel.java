@@ -19,24 +19,26 @@ import javax.swing.JButton;
 @SuppressWarnings("serial")
 public class DataPanel extends JPanel implements ActionListener, MouseListener {
 
-	private JTextField textFieldImie;
-	private JTextField textFieldNazwisko;
-	private JTextField txtDd;
-	private JTextField txtMm;
-	private JTextField txtRrrr;
-	private JLabel lblWiek;
-	private JLabel label;
-	private JLabel lblWzrost;
-	private JTextField textFieldWzrost;
-	private JLabel lblPlec;
-	private JRadioButton rdbtnKobieta;
-	private JRadioButton rdbtnMezczyzna;
+	public static JTextField textFieldImie;
+	public static JTextField textFieldNazwisko;
+	public static JTextField txtDd;
+	public static JTextField txtMm;
+	public static JTextField txtRrrr;
+	public static JLabel lblWiek;
+	public static JLabel label;
+	public static JLabel lblWzrost;
+	public static JTextField textFieldWzrost;
+	public static JLabel lblPlec;
+	public static JRadioButton rdbtnKobieta;
+	public static JRadioButton rdbtnMezczyzna;
 	static boolean kobieta, mezczyzna = false;
 	static String imie, nazwisko, wiekS, plec;
 	static int dzien, miesiac, rok, wzrost, wiek1;
 	private GregorianCalendar kalendarz;
 	private double aktualnyRok, wiek;
 	private JButton btnZapiszDane;
+	private JButton btnResetdata;
+	public static char i,n;
 
 	public DataPanel() {
 		setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][]"));
@@ -106,9 +108,14 @@ public class DataPanel extends JPanel implements ActionListener, MouseListener {
 		aktualnyRok = kalendarz.get(Calendar.YEAR);
 
 		btnZapiszDane = new JButton("Save");
-		add(btnZapiszDane, "cell 1 7");
+		add(btnZapiszDane, "flowx,cell 1 7");
 		btnZapiszDane.setActionCommand("zapisz");
 		btnZapiszDane.addActionListener(this);
+		
+		btnResetdata = new JButton("Reset data");
+		add(btnResetdata, "cell 1 7");
+		btnResetdata.setActionCommand("resetData");
+		btnResetdata.addActionListener(this);
 
 	}
 
@@ -159,6 +166,23 @@ public class DataPanel extends JPanel implements ActionListener, MouseListener {
 			String msg;
 			msg = "Save completed";
 			JOptionPane.showMessageDialog(null, msg);
+			
+			i = imie.charAt(0);
+			n = nazwisko.charAt(0);
+			
+			/*
+			textFieldImie.setText("");
+			textFieldNazwisko.setText("");
+			textFieldWzrost.setText("");
+			txtDd.setText("DD");
+			txtMm.setText("MM");
+			txtRrrr.setText("YYYY");
+			rdbtnMezczyzna.setSelected(false);
+			rdbtnKobieta.setSelected(false);
+			label.setText("");
+			*/
+		}
+		else if (e.getActionCommand().equals("resetData")) {
 			textFieldImie.setText("");
 			textFieldNazwisko.setText("");
 			textFieldWzrost.setText("");

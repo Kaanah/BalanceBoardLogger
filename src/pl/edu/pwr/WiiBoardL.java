@@ -276,16 +276,16 @@ public class WiiBoardL implements WiiBoardListener, ActionListener {
 					if (firstSave) {
 						out = new PrintWriter(savePanel.getFileSave());
 						timeStart = System.currentTimeMillis();
-						out.println("Name:" + "\t" + DataPanel.imie + "\n"
-								+ "Surname:" + "\t" + DataPanel.nazwisko + "\n"
-								+ "Date of Birth:" + "\t" + DataPanel.dzien
+						out.println("#Name:" + "\t" + DataPanel.imie + "\n"
+								+ "#Surname:" + "\t" + DataPanel.nazwisko + "\n"
+								+ "#Date of Birth:" + "\t" + DataPanel.dzien
 								+ "." + DataPanel.miesiac + "." + DataPanel.rok
-								+ "r.\n" + "Age:" + "\t" + DataPanel.wiek1
-								+ "\n" + "Sex:" + "\t" + DataPanel.plec + "\n"
-								+ "Height:" + "\t" + DataPanel.wzrost + "\n");
-						out.println("t [ms]" + "\t" + "bl [kg]" + "\t\t"
-								+ "br [kg]" + "\t\t" + "tl [kg]" + "\t\t"
-								+ "tr [kg]" + "\t\t" + "COPx [cm]" + "\t "
+								+ "r.\n" + "#Age:" + "\t" + DataPanel.wiek1
+								+ "\n" + "#Sex:" + "\t" + DataPanel.plec + "\n"
+								+ "#Height:" + "\t" + DataPanel.wzrost + "\n");
+						out.println("#t [ms]" + "\t" + "bl [kg]" + "\t"
+								+ "br [kg]" + "\t" + "tl [kg]" + "\t"
+								+ "tr [kg]" + "\t" + "COPx [cm]" + "\t "
 								+ "COPy [cm]");
 						firstSave = false;
 					}

@@ -21,13 +21,13 @@ public class GraphPanel extends JPanel{
 	final static ITrace2D trace = new Trace2DLtd(200,"COPx"); 
 	final static ITrace2D trace2 = new Trace2DLtd(200,"COPy"); 
 	boolean zapis = false;
-
+	public static Chart2D chart;
 	
 	public GraphPanel() {
 		setLayout(new BorderLayout(0,0));
 		
 	    JPanel frameGraph = new JPanel();
-	    Chart2D chart = new Chart2D();
+	    chart = new Chart2D();
 	    add(frameGraph,BorderLayout.CENTER);
 	    frameGraph.setLayout(new BorderLayout());	    
 	    frameGraph.add(chart,BorderLayout.CENTER);
@@ -42,8 +42,10 @@ public class GraphPanel extends JPanel{
 	   
 	    trace2.setColor(Color.BLUE); 
 	    chart.addTrace(trace2);
+
 	    
-	    timer = new Timer(true);
+	    //timer = new Timer();
+	    
 	    
 	}
 

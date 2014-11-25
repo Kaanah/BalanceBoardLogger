@@ -1,14 +1,21 @@
 package pl.edu.pwr;
 
+import info.monitorenter.gui.chart.events.Chart2DActionSaveImageSingleton;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -98,14 +105,22 @@ public class SaveOptionsPanel extends JPanel implements ActionListener {
 		if (e.getActionCommand().equals("start")) {
 
 			if (!save) {
-				btnStart.setText("Stop");
+				licznik = 0;
+				if(tfTestTime.getText().equals("")){
+					czasPomiaru = 0;
+				}
+				else{
+				czasPomiaru = (int) Double.parseDouble(tfTestTime.getText());
+				czasPomiaru = czasPomiaru * 60; //konwersja z minut na sekundy
+				}
+				if(czasPomiaru != 0){
+					
+				btnStart.setText("Test in progress...");
+				btnStart.setEnabled(false);
 				fileSave = new File(tfPath.getText(), tfFileName.getText());
 				System.out.println("File for saving: " + fileSave.getPath());
 				save = true;
 
-				licznik = 0;
-				czasPomiaru = (int) Double.parseDouble(tfTestTime.getText());
-				czasPomiaru = czasPomiaru * 60; //konwersja z minut na sekundy
 				timer = new Timer();
 				odliczanie = new TimerTask() {
 
@@ -147,17 +162,68 @@ public class SaveOptionsPanel extends JPanel implements ActionListener {
 								}
 							}
 						} else {
-							lblTimeRemaining.setText("End of the test. PRESS STOP NOW.");
+							lblTimeRemaining.setText("End of the test");
 							licznik = 0;
+							
+							stopClicked = true;
+							//btnStart.setEnabled(false);
+							System.out.println("Stop clicked");
+							btnStart.setText("Start");
+							save = false;
+							
+							int odp = JOptionPane.showConfirmDialog(null, "Save the chart to file?","", JOptionPane.YES_NO_OPTION);
+							
+							if (odp == JOptionPane.YES_OPTION){
+								
+						    BufferedImage wykres = GraphPanel.chart.snapShot();
+						    
+						    int returnVal = fc.showOpenDialog(SaveOptionsPanel.this);
+							if (returnVal == JFileChooser.APPROVE_OPTION) {
+								filePath = fc.getSelectedFile();
+								tfPath.setText(filePath.getPath());
+							}
+							date = new Date();
+							sdf = new SimpleDateFormat("yyMMdd_HHmmss"); // SSS is
+																			// miliseconds
+							String formattedDate = sdf.format(date);
+							String nazwaWykresu =  formattedDate + "_" + DataPanel.i + "_" + DataPanel.n + ".jpg";
+							File sciezkaWykresu = fc.getSelectedFile();
+							try {
+								ImageIO.write(wykres, "JPEG", new File(sciezkaWykresu,nazwaWykresu));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						    
+							JOptionPane.showMessageDialog(null, "Saving completed");
+							
 							timer.cancel();
-							timer.purge();
+							timer.purge();	
+							
+							GraphPanel.trace.removeAllPoints();
+							GraphPanel.trace2.removeAllPoints();
+							
+							}
+							else if (odp == JOptionPane.NO_OPTION){
+
+								timer.cancel();
+								timer.purge();	
+								
+								GraphPanel.trace.removeAllPoints();
+								GraphPanel.trace2.removeAllPoints();
+								
+							}
+							
+							//GraphPanel.timer.cancel();
+							//GraphPanel.timer.purge();
 						}
 					}
 
 				};
 
 				timer.schedule(odliczanie, 0, 1000);
-
+				
+				//GraphPanel.timer = new Timer();
+				
 				TimerTask drawGraph = new TimerTask() {
 
 					private long startTime = System.currentTimeMillis();
@@ -182,14 +248,17 @@ public class SaveOptionsPanel extends JPanel implements ActionListener {
 					}
 				};
 
-				GraphPanel.timer.schedule(drawGraph, 1000, 500);
-
+				timer.schedule(drawGraph, 1000, 500);
+				}
+				else if(czasPomiaru == 0){
+					JOptionPane.showMessageDialog(null, "Set test time");
+				}
 			} else if (save) {
-				stopClicked = true;
+				/* stopClicked = true;
 				btnStart.setEnabled(false);
-				System.out.println("Stop clicked");
+				System.out.println("Stop clicked");	
 				btnStart.setText("Start");
-				save = false;
+				save = false;*/
 			}
 
 		} else if (e.getActionCommand().equals("browse")) {
@@ -201,7 +270,7 @@ public class SaveOptionsPanel extends JPanel implements ActionListener {
 				sdf = new SimpleDateFormat("yyMMdd_HHmmss"); // SSS is
 																// miliseconds
 				String formattedDate = sdf.format(date);
-				tfFileName.setText(formattedDate + ".txt");
+				tfFileName.setText(formattedDate + "_" + DataPanel.i + "_" + DataPanel.n + ".txt");
 				btnStart.setEnabled(true);
 			}
 		}
