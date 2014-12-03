@@ -18,7 +18,7 @@ import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class DataPanel extends JPanel implements ActionListener, MouseListener {
-
+	
 	public static JTextField textFieldImie;
 	public static JTextField textFieldNazwisko;
 	public static JTextField txtDd;
